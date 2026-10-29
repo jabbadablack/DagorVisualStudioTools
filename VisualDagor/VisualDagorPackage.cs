@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Runtime.InteropServices;
 using System.Threading;
 using Microsoft.VisualStudio.Shell;
@@ -9,6 +9,7 @@ namespace Gaijin.VisualDagor;
 
 [PackageRegistration(UseManagedResourcesOnly = true, AllowsBackgroundLoading = true)]
 [Guid(Constants.PackageGuidString)]
+[ProvideMenuResource("Menus.ctmenu", 1)]
 public sealed class Package : AsyncPackage
 {
     private readonly StartupProjectWatcher startupProjectWatcher;
@@ -21,6 +22,7 @@ public sealed class Package : AsyncPackage
     protected override async Task InitializeAsync(CancellationToken cancellationToken, IProgress<ServiceProgressData> progress)
     {
         await base.InitializeAsync(cancellationToken, progress);
+        await NewGameCommand.InitializeAsync(this);
         await startupProjectWatcher.InitializeAsync(this);
     }
 

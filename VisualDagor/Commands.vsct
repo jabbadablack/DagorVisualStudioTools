@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<CommandTable xmlns="http://schemas.microsoft.com/VisualStudio/2005-10-18/CommandTable">
+  <Extern href="stdidcmd.h" />
+  <Extern href="vsshlids.h" />
+  <Commands package="guidVisualDagorPackage">
+    <Groups>
+      <Group guid="guidNewGameCommands" id="NewGameGroup" priority="0x0600">
+        <Parent guid="guidSHLMainMenu" id="IDM_VS_MENU_TOOLS" />
+      </Group>
+    </Groups>
+    <Buttons>
+      <Button guid="guidNewGameCommands" id="NewGameCommand" priority="0x0100" type="Button">
+        <Parent guid="guidNewGameCommands" id="NewGameGroup" />
+        <Strings><ButtonText>New Dagor Game...</ButtonText></Strings>
+      </Button>
+    </Buttons>
+  </Commands>
+  <Symbols>
+    <GuidSymbol name="guidVisualDagorPackage" value="{4c3c1106-0718-453f-9c9a-1a2c60f725c0}" />
+    <GuidSymbol name="guidNewGameCommands" value="{4b96f2a4-4865-483f-9f69-acbd94fb772b}">
+      <IDSymbol name="NewGameCommand" value="0x0100" />
+      <IDSymbol name="NewGameGroup" value="0x1020" />
+    </GuidSymbol>
+  </Symbols>
+</CommandTable>

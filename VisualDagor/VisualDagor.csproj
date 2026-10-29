@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="15.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Sdk="Microsoft.NET.Sdk" Project="Sdk.props" />
 
@@ -9,7 +9,7 @@
     <RootNamespace>Gaijin.VisualDagor</RootNamespace>
     <LangVersion>13.0</LangVersion>
     <Title>Visual Dagor</Title>
-    <Version>1.0.1.0</Version>
+    <Version>1.1.0.0</Version>
     <Authors>Andris Nyiscsák</Authors>
     <Company>Gaijin Games KFT</Company>
     <Description>Visual Studio Extension for more accurate intellisense support with DagorEngine and other develop time features for Visual Studio</Description>
@@ -17,7 +17,7 @@
     <PackageProjectUrl>https://github.com/GaijinEntertainment</PackageProjectUrl>
     <PackageIcon>Gaijin.png</PackageIcon>
     <PackageReadmeFile>README.md</PackageReadmeFile>
-    <RepositoryUrl>https://github.com/GaijinEntertainment/DagorVisualStudioTools</RepositoryUrl>
+    <RepositoryUrl>https://github.com/jabbadablack/DagorVisualStudioTools</RepositoryUrl>
     <PackageTags>Dagor;DagorEngine</PackageTags>
     <AssemblyVersion>$(Version)</AssemblyVersion>
     <FileVersion>$(Version)</FileVersion>
@@ -83,6 +83,13 @@
     <PackageReference Include="Microsoft.VisualStudio.SDK" Version="17.13.40096" ExcludeAssets="runtime" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Design" />
+    <Reference Include="System.Web.Extensions" />
+    <VSCTCompile Include="Commands.vsct"><ResourceName>Menus.ctmenu</ResourceName></VSCTCompile>
+  </ItemGroup>
   <Import Sdk="Microsoft.NET.Sdk" Project="Sdk.targets" />
   <Import Project="$(VSToolsPath)\vssdk\Microsoft.VSSDK.targets" />
 </Project>

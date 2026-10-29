@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using EnvDTE;
 using Microsoft.VisualStudio;
@@ -172,7 +172,7 @@ internal sealed class StartupProjectWatcher : IDisposable, IVsSelectionEvents, I
 
     private void OnStartupProjectChanged(IVsHierarchy pHierarchy)
     {
-        var newStartupProject = dagorSharedProjects.Contains(pHierarchy) || !pHierarchy.IsCapabilityMatch(Constants.DagorProjectIdentifier) ? null : pHierarchy;
+        var newStartupProject = pHierarchy is null || dagorSharedProjects.Contains(pHierarchy) || !pHierarchy.IsCapabilityMatch(Constants.DagorProjectIdentifier) ? null : pHierarchy;
         if (newStartupProject is null && startupProject is null)
             return;
 #if DEBUG
@@ -183,7 +183,8 @@ internal sealed class StartupProjectWatcher : IDisposable, IVsSelectionEvents, I
 
         startupProject = newStartupProject;
 
-        startupProject.AdviseHierarchyEvents(this, out hierarchyEventsCookie);
+        hierarchyEventsCookie = VSCOOKIE_NIL;
+        startupProject?.AdviseHierarchyEvents(this, out hierarchyEventsCookie);
 
         ApplyStartupProjectProperties();
     }
