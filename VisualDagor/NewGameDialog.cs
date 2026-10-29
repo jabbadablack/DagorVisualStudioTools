@@ -56,7 +56,7 @@ internal sealed class NewGameDialog : Form
         var create = new Button { Text = "Create" };
         create.Click += (_, _) => {
             try {
-                if (!File.Exists(Path.Combine(EngineRoot, "prog", "_jBuild", "msbuild", "create_game.py"))) throw new InvalidOperationException("Select an engine checkout with the Visual Dagor template integration.");
+                if (!File.Exists(Path.Combine(EngineRoot, "dng.py"))) throw new InvalidOperationException("Select an engine checkout with the Visual Dagor template integration.");
                 if (!Regex.IsMatch(GameName, @"^[A-Za-z][A-Za-z0-9_]{0,63}$")) throw new InvalidOperationException("Use 1-64 letters, digits or underscores, starting with a letter.");
                 if (string.IsNullOrWhiteSpace(parent.Text)) throw new InvalidOperationException("Choose a project location.");
                 engine.Text = Path.GetFullPath(EngineRoot).TrimEnd(Path.DirectorySeparatorChar);

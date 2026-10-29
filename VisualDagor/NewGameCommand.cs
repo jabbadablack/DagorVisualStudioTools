@@ -47,21 +47,12 @@ internal sealed class NewGameCommand
             var result = await GenerateAsync(dialog.EngineRoot, dialog.GameName, dialog.GameDirectory, dialog.TemplateName);
             await package.JoinableTaskFactory.SwitchToMainThreadAsync();
             Project gameProject = null;
-            var engineSolution = Path.Combine(dialog.EngineRoot, "DagorEngine.sln");
-            if (string.Equals(dte.Solution.FullName, engineSolution, StringComparison.OrdinalIgnoreCase))
-            {
-                gameProject = dte.Solution.AddFromFile(result["project"]);
-                dte.Solution.SaveAs(dte.Solution.FullName);
-            }
-            else
-            {
-                dte.Solution.Open(result["solution"]);
-                foreach (Project project in dte.Solution.Projects)
-                    if (string.Equals(project.FullName, result["project"], StringComparison.OrdinalIgnoreCase)) gameProject = project;
-            }
+            dte.Solution.Open(result["solution"]);
+            foreach (Project project in dte.Solution.Projects)
+                if (string.Equals(project.FullName, result["project"], StringComparison.OrdinalIgnoreCase)) gameProject = project;
             if (gameProject != null) dte.Solution.SolutionBuild.StartupProjects = new[] { gameProject.UniqueName };
             dte.Solution.SolutionBuild.SolutionConfigurations.Item("dev").Activate();
-            dte.StatusBar.Text = "Dagor game created. Build the project, then press F5 to run.";
+            dte.StatusBar.Text = "Dagor game created. Run python prog/build.py in its folder for the first code/content build, then use F5.";
         }
         catch (Exception error)
         {
@@ -76,9 +67,9 @@ internal sealed class NewGameCommand
         var devtools = Environment.GetEnvironmentVariable("GDEVTOOL") ?? Path.Combine(Directory.GetParent(engine).FullName, "devtools");
         var python = Path.Combine(devtools, "python3", "python.exe");
         if (!File.Exists(python)) python = "python";
-        var script = Path.Combine(engine, "prog", "_jBuild", "msbuild", "create_game.py");
+        var script = Path.Combine(engine, "dng.py");
         using var process = new System.Diagnostics.Process { StartInfo = new ProcessStartInfo {
-            FileName = python, Arguments = "\"" + script + "\" --name " + name + " --directory \"" + directory + "\" --template " + template + " --no-engine-solution",
+            FileName = python, Arguments = "\"" + script + "\" new --name " + name + " --directory \"" + directory + "\" --template " + template + " --no-engine-solution",
             WorkingDirectory = engine, UseShellExecute = false, CreateNoWindow = true,
             RedirectStandardOutput = true, RedirectStandardError = true } };
         process.Start();
@@ -94,7 +85,19 @@ internal sealed class NewGameCommand
     private static string FindEngine(string solution)
     {
         for (var folder = string.IsNullOrEmpty(solution) ? null : new DirectoryInfo(Path.GetDirectoryName(solution)); folder != null; folder = folder.Parent)
-            if (File.Exists(Path.Combine(folder.FullName, "prog", "_jBuild", "msbuild", "create_game.py"))) return folder.FullName;
+        {
+            if (File.Exists(Path.Combine(folder.FullName, "dng.py"))) return folder.FullName;
+            var manifest = Path.Combine(folder.FullName, "dng-project.json");
+            if (!File.Exists(manifest)) continue;
+            try
+            {
+                var data = new JavaScriptSerializer().Deserialize<Dictionary<string, object>>(File.ReadAllText(manifest));
+                if (data.TryGetValue("engine", out var value) && value is string engine && File.Exists(Path.Combine(engine, "dng.py")))
+                    return engine;
+            }
+            catch (ArgumentException) { }
+            catch (IOException) { }
+        }
         return Environment.GetEnvironmentVariable("DAGOR_ENGINE_ROOT") ?? "";
     }
 }
