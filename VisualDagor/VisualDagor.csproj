@@ -78,10 +78,11 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="Microsoft.VSSDK.BuildTools" Version="17.13.2126" PrivateAssets="all" />
     <PackageReference Include="Microsoft.VisualStudio.ProjectSystem" Version="17.13.84" />
-    <PackageReference Include="Microsoft.VisualStudio.SDK" Version="17.13.40023" ExcludeAssets="runtime" />
+    <PackageReference Include="Microsoft.VisualStudio.SDK" Version="17.13.40096" ExcludeAssets="runtime" />
   </ItemGroup>
 
   <Import Sdk="Microsoft.NET.Sdk" Project="Sdk.targets" />
-  <Import Project="$(VSToolsPath)\vssdk\Microsoft.VSSDK.targets" Condition="'$(VSToolsPath)' != ''" />
+  <Import Project="$(VSToolsPath)\vssdk\Microsoft.VSSDK.targets" />
 </Project>
