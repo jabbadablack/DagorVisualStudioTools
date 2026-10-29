@@ -56,8 +56,9 @@ CMake project or `prog/_jBuild/CMakeLists.txt` directly; they do not need the VS
 Both templates include the shared starter scene editor: F2 switches the ImGui
 inspector; F10 switches free camera. Use WASD, E/C, mouse and Shift; hold RMB over
 the editor viewport to fly. The inspector supports selection, object creation
-and deletion, transform edits, and scene save/load. Visual Studio F5 starts in
-editor mode. The inspector uses the engine's testGI shader bundle, which must be
+and deletion, transform edits, and scene save/load. The normal debug/dev executable includes these modes; F2/F10 switches them
+at runtime without separate targets or rebuilds. Release omits the starter
+development tools. The inspector uses the engine's testGI shader bundle, which must be
 installed/built with the engine's sample shaders.
 
 The portable workspace and its presets live under `prog/_jBuild` in the engine.
