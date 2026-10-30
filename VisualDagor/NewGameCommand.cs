@@ -4,6 +4,7 @@ using System.ComponentModel.Design;
 using System.Diagnostics;
 using System.IO;
 using System.Threading.Tasks;
+using System.Text.RegularExpressions;
 using System.Web.Script.Serialization;
 using System.Windows.Forms;
 using EnvDTE;
@@ -87,13 +88,13 @@ internal sealed class NewGameCommand
         for (var folder = string.IsNullOrEmpty(solution) ? null : new DirectoryInfo(Path.GetDirectoryName(solution)); folder != null; folder = folder.Parent)
         {
             if (File.Exists(Path.Combine(folder.FullName, "dng.py"))) return folder.FullName;
-            var manifest = Path.Combine(folder.FullName, "dng-project.json");
-            if (!File.Exists(manifest)) continue;
+            var application = Path.Combine(folder.FullName, "application.blk");
+            if (!File.Exists(application)) continue;
             try
             {
-                var data = new JavaScriptSerializer().Deserialize<Dictionary<string, object>>(File.ReadAllText(manifest));
-                if (data.TryGetValue("engine", out var value) && value is string engine && File.Exists(Path.Combine(engine, "dng.py")))
-                    return engine;
+                var match = Regex.Match(File.ReadAllText(application), @"^engineRoot:t\s*=\s*""([^""]*)""", RegexOptions.Multiline);
+                if (match.Success && File.Exists(Path.Combine(match.Groups[1].Value, "dng.py")))
+                    return match.Groups[1].Value;
             }
             catch (ArgumentException) { }
             catch (IOException) { }

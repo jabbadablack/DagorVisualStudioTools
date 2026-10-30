@@ -9,7 +9,7 @@
     <RootNamespace>Gaijin.VisualDagor</RootNamespace>
     <LangVersion>13.0</LangVersion>
     <Title>Visual Dagor</Title>
-    <Version>1.1.1.0</Version>
+    <Version>1.1.2.0</Version>
     <Authors>Andris Nyiscsák</Authors>
     <Company>Gaijin Games KFT</Company>
     <Description>Visual Studio Extension for more accurate intellisense support with DagorEngine and other develop time features for Visual Studio</Description>
